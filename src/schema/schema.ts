@@ -20,3 +20,9 @@ export const loginSchema = z.object({
     email: z.email({message: "Email is required"}),
     password: z.string()
 })
+
+
+export const informationSchema = z.object({
+    color: z.union([z.string(), z.undefined()]),
+    number: z.union([z.number(), z.undefined()])
+})
