@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { validateBody, validateURL } from "../middleware/validation.js";
 import { informationSchema, loginSchema, signUpSchema } from "../schema/schema.js";
+import { getMainAPI } from "~/controllers/controller.js";
 
 
 const router = Router();
 
-router.get('/');
+router.get('/', getMainAPI);
 
 router.post('/signup', validateBody(signUpSchema));
 
