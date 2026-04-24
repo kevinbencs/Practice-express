@@ -2,6 +2,6 @@ import * as dotenv from "dotenv"
 
 dotenv.config()
 
-const { PORT } = process.env
+const { PORT, SECRET } = process.env
 
-export { PORT } 
+export { PORT, SECRET } 
