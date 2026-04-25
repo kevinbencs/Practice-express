@@ -21,7 +21,21 @@ export const singUp = async (req: Request, res: Response) => {
     try {
         const body = await req.body as { name: string, password: string, email: string };
 
+        const existUser = await prisma.user.findUnique({
+            where: {
+                email: body.email
+            }
+        })
+
+        if (existUser) return res.status(400).json({error: "Email is used in another account"})
+
         const hashPassword = await bcrypt.hash(body.password, 10)
+
+        const user = await prisma.user.create({
+            email: body.email,
+            name: body.name,
+            password: hashPassword
+        })
 
         return res.status(201).json({ message: "Success" })
 
@@ -36,9 +50,18 @@ export const signIn = async (req: Request, res: Response) => {
     try {
         const body = await req.body as { password: string, email: string };
 
-        const pass = "1" //have to change to db
+        const user = await prisma.user.findUnique({
+            where:{
+                email: body.email
+            }
+        })
 
-        const passwordConfirm = await bcrypt.compare(body.password, pass)
+        if (!user) return res.status(401).json({error: 'Invalid email or password. Please try again with the correct credentials'})
+
+
+        const passwordConfirm = await bcrypt.compare(body.password, user.password)
+
+        if(!passwordConfirm) return res.status(401).json({error: 'Invalid email or password. Please try again with the correct credentials'})
 
 
         const token = jwt.sign({ id: 2, }, SECRET, { expiresIn: "1h" })
