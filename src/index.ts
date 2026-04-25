@@ -1,12 +1,21 @@
-import  express  from "express";
+import  express, {urlencoded}  from "express";
 import { PORT } from "./config/config.ts";
 import router from "./routes/routes.ts";
 
 
+
 const app = express();
 
-app.use(router)
 
+app.use(urlencoded({ extended: true }));
+
+app.use(express.json({
+    type: ['application/json', 'text/plain'],
+    limit: '1mb'
+}));
+
+
+app.use(router)
 const server = app.listen(PORT, () => {
     console.log("Server is running on the " + PORT)
 })

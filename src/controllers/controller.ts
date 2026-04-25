@@ -2,7 +2,9 @@ import type { Response, Request } from "express";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken"
 import { SECRET } from "../config/config.ts";
+import { PrismaClient } from "@prisma/client/extension";
 
+const prisma = new PrismaClient()
 
 
 export const getMainAPI = async (req: Request, res: Response) => {
