@@ -1,6 +1,7 @@
 import  express, {urlencoded}  from "express";
-import { PORT } from "./config/config.ts";
+import { PORT, SECRET_COOKIE } from "./config/config.ts";
 import router from "./routes/routes.ts";
+import cookieParser from "cookie-parser"
 
 
 
@@ -14,6 +15,7 @@ app.use(express.json({
     limit: '1mb'
 }));
 
+app.use(cookieParser(SECRET_COOKIE))
 
 app.use(router)
 const server = app.listen(PORT, () => {

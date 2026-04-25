@@ -27,7 +27,7 @@ export const singUp = async (req: Request, res: Response) => {
             }
         })
 
-        if (existUser) return res.status(400).json({error: "Email is used in another account"})
+        if (existUser) return res.status(400).json({ error: "Email is used in another account" })
 
         const hashPassword = await bcrypt.hash(body.password, 10)
 
@@ -51,17 +51,17 @@ export const signIn = async (req: Request, res: Response) => {
         const body = await req.body as { password: string, email: string };
 
         const user = await prisma.user.findUnique({
-            where:{
+            where: {
                 email: body.email
             }
         })
 
-        if (!user) return res.status(401).json({error: 'Invalid email or password. Please try again with the correct credentials'})
+        if (!user) return res.status(401).json({ error: 'Invalid email or password. Please try again with the correct credentials' })
 
 
         const passwordConfirm = await bcrypt.compare(body.password, user.password)
 
-        if(!passwordConfirm) return res.status(401).json({error: 'Invalid email or password. Please try again with the correct credentials'})
+        if (!passwordConfirm) return res.status(401).json({ error: 'Invalid email or password. Please try again with the correct credentials' })
 
 
         const token = jwt.sign({ id: 2, }, SECRET, { expiresIn: "1h" })
@@ -76,6 +76,29 @@ export const signIn = async (req: Request, res: Response) => {
         )
 
         return res.status(200).json({ message: "Success" })
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Internal server error.' })
+    }
+}
+
+
+export const logout = async (req: Request, res: Response) => {
+    try {
+        const token = req.signedCookies['user'];
+
+        if (!token) return res.status(200).json({ "message": "You are logged out" })
+
+        res.clearCookie("user", {
+            signed: true,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'lax'
+        })
+
+        return res.status(200).json({ "message": "You are logged out" })
+
 
     } catch (error) {
         console.error(error)
