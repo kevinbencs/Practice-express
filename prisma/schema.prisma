@@ -19,3 +19,10 @@ model User {
   name String
   password String
 }
+
+model Jumper {
+  id String @id @default(uuid()) @db.Uuid
+  size String
+  color String
+  numb Number
+}

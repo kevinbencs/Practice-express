@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { validateBody, validateURL } from "../middleware/validation.js";
-import { informationSchema, loginSchema, signUpSchema } from "../schema/schema.js";
-import { getMainAPI, logout, signIn, singUp } from "~/controllers/controller.js";
+import { validateBody, validateURL } from "../middleware/validation.ts";
+import { informationSchema, loginSchema, signUpSchema } from "../schema/schema.ts";
+import { getInformation, getMainAPI, logout, signIn, singUp } from "~/controllers/controller.ts";
+import { verify } from "~/middleware/verify.ts";
 
 
 const router = Router();
@@ -14,7 +15,7 @@ router.post('/login', validateBody(loginSchema), signIn);
 
 router.get('/logout', logout)
 
-/*router.get('/information', validateURL(informationSchema))*/
+router.get('/information',verify, validateURL(informationSchema), getInformation)
 
 
 export default router;

@@ -24,5 +24,5 @@ export const loginSchema = z.object({
 
 export const informationSchema = z.object({
     color: z.union([z.string(), z.undefined()]),
-    number: z.union([z.number(), z.undefined()])
+    size: z.union([z.string(), z.undefined()])
 })

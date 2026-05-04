@@ -105,3 +105,28 @@ export const logout = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Internal server error.' })
     }
 }
+
+
+export const getInformation = async (req: Request, res: Response) => {
+    try {
+        const {size, color} = await req.params as {size: string | undefined, color: string | undefined};
+
+        if(!size || !color) return res.status(404).json({error: "There is no jumper with this details"});
+
+        const jumper = await prisma.jumper.findUnique({
+            where: {
+                size,
+                color
+            }
+        })
+
+        if(!jumper) return res.status(404).json({error: "There is no jumper with this details"});
+
+        return res.status(200).json({message: `We have ${jumper.numb} jumpers.`})
+
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Internal server error.' })
+    }
+}

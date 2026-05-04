@@ -42,6 +42,7 @@ export const verify = async (req: Request, res: Response, next: NextFunction) =>
             return res.status(401).json({ error: 'Please log in' });
         }
 
-        return res.status(500).json({ error: "Server error" })
+        
+        return res.status(500).json({ error: 'Internal server error.' })
     }
 }
